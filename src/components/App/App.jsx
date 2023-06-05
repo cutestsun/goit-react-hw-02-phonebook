@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { Formik } from 'formik';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ContactsList } from '../ContactsList/ContactsList';
 import { ContactsForm } from '../ContactsForm/ContactsForm';
 import { Filter } from '../Filter/Filter';
@@ -19,12 +20,10 @@ export class App extends Component {
   state = { ...initialState };
 
   onSubmit = (values, actions) => {
-    // const isInContacts = this.state.contacts.some(
-    //   ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
-    // );
     const isInContacts = this.state.contacts.some(
       ({ name }) => name.toLowerCase() === values.name.toLowerCase()
     );
+
     if (isInContacts) {
       return alert(`${values.name} is already in contacts`);
     }
@@ -43,9 +42,9 @@ export class App extends Component {
     actions.resetForm();
   };
 
-  onFilterChange(e) {
+  onFilterChange = e => {
     this.setState({ filter: e.target.value });
-  }
+  };
 
   getVisibleContacts() {
     const { filter, contacts } = this.state;
@@ -61,6 +60,7 @@ export class App extends Component {
       contacts: prevState.contacts.filter(({ id }) => id !== contactId),
     }));
   };
+
   render() {
     return (
       <MainWrapper>
@@ -75,7 +75,7 @@ export class App extends Component {
         <p>Find contacts by name</p>
         <Filter
           value={this.state.filter}
-          onFilterChange={e => this.onFilterChange(e)}
+          onFilterChange={this.onFilterChange}
         />
         <ContactsList
           contacts={this.getVisibleContacts()}
@@ -85,3 +85,11 @@ export class App extends Component {
     );
   }
 }
+
+Formik.propTypes = {
+  initialValues: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }),
+  onSubmit: PropTypes.func.isRequired,
+};

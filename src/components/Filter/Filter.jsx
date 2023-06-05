@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export const Filter = ({ value, onFilterChange }) => {
   return (
     <input
@@ -7,4 +9,9 @@ export const Filter = ({ value, onFilterChange }) => {
       placeholder="Search by name"
     />
   );
+};
+
+Filter.propTypes = {
+  value: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
